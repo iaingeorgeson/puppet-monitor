@@ -5,6 +5,7 @@ define monitor::service_serverside (
     $command_line   = false,
     $command_name,
     $command_args   = false,
+    $check_interval = false,
     $server_include = false,
     $host,
     $address,
@@ -22,7 +23,8 @@ define monitor::service_serverside (
     { "${host}-${service}":
         attributes => {host_name           => $host,
                        service_description => $service,
-                       check_command       => $command_name,},
+                       check_command       => $command_name,
+                       check_interval      => $check_interval},
     }
 
     ensure_resource ('nagiosng::object::host', $host,

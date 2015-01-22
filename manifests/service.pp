@@ -59,6 +59,7 @@ define monitor::service (
     $address        = $::ipaddress,
     $service        = $name,
     $timeout        = 10,
+    $check_interval = false,
 )
 {
     # Set the command_name for nagios / nrpe to use. This is based on
@@ -189,6 +190,7 @@ define monitor::service (
         command_line   => $real_command_line,
         command_name   => $command_name,
         command_args   => $command_args,
+        check_interval => $check_interval,
         icon           => $icon,
     }
 }
