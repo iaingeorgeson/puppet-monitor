@@ -96,7 +96,14 @@ define monitor::device (
         include $server_include
     }
 
-    # notice "$name -> $name_array: $real_host, $server"
+    if $parents
+    {
+        $real_parents = $parents
+    }
+    else
+    {
+        $real_parents = hiera('monitor::service::parents', false)
+    }
 
     # And spin up the nagios stanzas
     nagiosng::object::service { "${real_host}-${$real_service}":
@@ -113,7 +120,7 @@ define monitor::device (
                                      address         => $real_address,
                                      icon_image      => $icon,
                                      statusmap_image => $icon,
-                                     parents         => $parents,
+                                     parents         => $real_parents,
                      }})
 
     ##FIXME: This would be better as  if ! defined(...)
