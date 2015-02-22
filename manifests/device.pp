@@ -76,7 +76,7 @@ define monitor::device (
 
     # Set the command_name for nagios to use. This is based on the
     # resource's $name.
-    $safe_service = regsubst($real_service, '[/:\n]', '_', 'GM')
+    $safe_service = regsubst($real_service, '[/:\n]', ':', 'GM')
     $command_name = "check_${safe_service}"
 
     # Unless the $command_line is absolute (starts with / or $)
