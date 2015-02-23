@@ -8,16 +8,22 @@
 # automatically for you. This resource requires the user to be more
 # explicit, and doesn't pull information from hiera and facter.
 
-# The default resource name is "${host}-${service}". These can be
-# overridden by setting the attributes directly. $address will also be
-# a copy of the $host, unless you set that directly.
+# The host and service names for the check are taken by default from
+# the resource name, split on ':'. You can if you wish override any
+# of service, host or address by setting them explicitly.
+
+# Similarly to the monitor::service resource, the command_line must be
+# the same for all checks with the same command_name - if you want two
+# different check_pings to behave differently, you must give them
+# different names.
 
 define monitor::device (
-    $server_include = false,
     $service        = false,
     $host           = false,
     $address        = false,
     $command_line   = false,
+    $command_source = false,
+    $plugin_path    = '/usr/lib64/nagios/plugins',
     $check_interval = false,
     $icon           = 'server.png',
     $parents        = false,
@@ -91,9 +97,17 @@ define monitor::device (
         $real_command_line = "\$USER1\$/${command_line}"
     }
 
-    if $server_include
+    if $command_source
     {
-        include $server_include
+        $command_source_basename =
+        regsubst($command_source, '^.*/', '')
+
+        file { "${plugin_path}/${command_source_basename}":
+            owner  => 'nagios',
+            group  => 'nagios',
+            mode   => 755,
+            source => $command_source,
+        }
     }
 
     if $parents
