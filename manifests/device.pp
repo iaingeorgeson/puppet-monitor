@@ -102,12 +102,13 @@ define monitor::device (
         $command_source_basename =
         regsubst($command_source, '^.*/', '')
 
-        file { "${plugin_path}/${command_source_basename}":
+        ensure_resource('file', "${plugin_path}/${command_source_basename}",
+        {
             owner  => 'nagios',
             group  => 'nagios',
             mode   => 755,
             source => $command_source,
-        }
+        })
     }
 
     if $parents
