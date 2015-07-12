@@ -60,8 +60,18 @@ define monitor::service (
     $service        = $name,
     $timeout        = 10,
     $check_interval = false,
+    $notes_url_fmt  = false,
 )
 {
+    if $notes_url_fmt
+    {
+        $notes_url = sprintf($notes_url_fmt, $service)
+    }
+    else
+    {
+        $notes_url = false
+    }
+
     # Set the command_name for nagios / nrpe to use. This is based on
     # the resource's $name.
     $safe_name    = regsubst($name, '[/:\n]', '_', 'GM')
@@ -192,5 +202,6 @@ define monitor::service (
         command_args   => $command_args,
         check_interval => $check_interval,
         icon           => $icon,
+        notes_url      => $notes_url,
     }
 }

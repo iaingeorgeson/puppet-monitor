@@ -12,6 +12,7 @@ define monitor::service_serverside (
     $parents        = false,
     $service,
     $icon           = 'server.png',
+    $notes_url      = false,
 )
 {
     if $server_include
@@ -24,7 +25,9 @@ define monitor::service_serverside (
         attributes => {host_name           => $host,
                        service_description => $service,
                        check_command       => $command_name,
-                       check_interval      => $check_interval},
+                       check_interval      => $check_interval,
+                       notes_url           => $notes_url,
+        },
     }
 
     ensure_resource ('nagiosng::object::host', $host,
