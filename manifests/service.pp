@@ -69,7 +69,15 @@ define monitor::service (
     }
     else
     {
-        $notes_url = false
+        $real_notes_url_fmt = hiera('monitor::device::notes_url_fmt', false)
+        if $real_notes_url_fmt
+        {
+            $notes_url = sprintf($real_notes_url_fmt, $service)
+        }
+        else
+        {
+            $notes_url = false
+        }
     }
 
     # Set the command_name for nagios / nrpe to use. This is based on

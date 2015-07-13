@@ -127,7 +127,15 @@ define monitor::device (
     }
     else
     {
-        $notes_url = false
+        $real_notes_url_fmt = hiera('monitor::service::notes_url_fmt', false)
+        if $real_notes_url_fmt
+        {
+            $notes_url = sprintf($real_notes_url_fmt, $service)
+        }
+        else
+        {
+            $notes_url = false
+        }
     }
 
     # And spin up the nagios stanzas
