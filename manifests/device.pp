@@ -27,6 +27,7 @@ define monitor::device (
     $check_interval = false,
     $icon           = 'server.png',
     $parents        = false,
+    $notes_url_fmt  = false,
 )
 {
     # Split the ${host}-${service} out of the name
@@ -120,12 +121,23 @@ define monitor::device (
         $real_parents = hiera('monitor::service::parents', false)
     }
 
+    if $notes_url_fmt
+    {
+        $notes_url = sprintf($notes_url_fmt, $service)
+    }
+    else
+    {
+        $notes_url = false
+    }
+
     # And spin up the nagios stanzas
     nagiosng::object::service { "${real_host}-${$real_service}":
         attributes => {host_name           => $real_host,
                        service_description => $real_service,
                        check_command       => $command_name,
-                       check_interval      => $check_interval},
+                       check_interval      => $check_interval,
+                       notes_url           => $notes_url,
+        },
     }
 
     ##FIXME: This would be better as  if ! defined(...)
