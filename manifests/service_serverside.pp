@@ -34,8 +34,8 @@ define monitor::service_serverside (
     if $hostgroup
     {
         ensure_resource ('nagiosng::object::hostgroup', $hostgroup,
-                         {attributes => {host_name       => $hostgroup,
-                                         alias           => $hostgroup,
+                         {attributes => {hostgroup_name => $hostgroup,
+                                         alias          => $hostgroup,
                          }})
     }
 
