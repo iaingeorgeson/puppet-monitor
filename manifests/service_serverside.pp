@@ -36,7 +36,6 @@ define monitor::service_serverside (
         ensure_resource ('nagiosng::object::hostgroup', $hostgroup,
                          {attributes => {host_name       => $hostgroup,
                                          alias           => $hostgroup,
-                                         notes_url       => $notes_url,
                          }})
     }
 
