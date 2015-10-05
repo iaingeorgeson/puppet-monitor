@@ -8,6 +8,7 @@ define monitor::service_serverside (
     $check_interval = false,
     $server_include = false,
     $host,
+    $hostgroup      = false,
     $address,
     $parents        = false,
     $service,
@@ -30,9 +31,16 @@ define monitor::service_serverside (
         },
     }
 
+    ensure_resource ('nagiosng::object::hostgroup', $hostgroup,
+                     {attributes => {host_name       => $hostgroup,
+                                     alias           => $hostgroup,
+                                     notes_url       => $notes_url,
+        }})
+
     ensure_resource ('nagiosng::object::host', $host,
                      {attributes => {host_name       => $host,
                                      alias           => $host,
+                                     hostgroups      => $hostgroup,
                                      address         => $address,
                                      icon_image      => $icon,
                                      statusmap_image => $icon,

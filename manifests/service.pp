@@ -45,7 +45,6 @@
 # service check timeout is set in nagios.cfg.
 
 ##TODO: servicegroups parameter
-##TODO: hostgroups from hiera
 
 define monitor::service (
     $command_line   = false,
@@ -184,7 +183,8 @@ define monitor::service (
         default      => 'server.png',
     }
 
-    $parents = hiera('monitor::service::parents', false)
+    $hostgroup = hiera('monitor::service::hostgroup', $::enc_zone)
+    $parents   = hiera('monitor::service::parents', false)
 
     # The '@@' prefix marks this as an exported resource. It is not
     # created with the rest of the manifest. Instead it's pushed into
@@ -201,6 +201,7 @@ define monitor::service (
     @@monitor::service_serverside
     { "$host-$service":
         host           => $host,
+        hostgroup      => $hostgroup,
         address        => $address,
         parents        => $parents,
         service        => $service,
