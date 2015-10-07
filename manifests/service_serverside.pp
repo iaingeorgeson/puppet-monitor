@@ -4,6 +4,7 @@
 define monitor::service_serverside (
     $command_line   = false,
     $command_name,
+    $command_source = false,
     $command_args   = false,
     $check_interval = false,
     $server_include = false,
@@ -13,12 +14,26 @@ define monitor::service_serverside (
     $parents        = false,
     $service,
     $icon           = 'server.png',
+    $plugin_path    = '/usr/lib64/nagios/plugins',
     $notes_url      = false,
 )
 {
     if $server_include
     {
         include $server_include
+    }
+
+    if $command_source
+    {
+        $command_source_basename = regsubst($command_source, '^.*/', '')
+
+        ensure_resource ('file', "${plugin_path}/${command_source_basename}",
+        {
+            owner  => 'nagios',
+            group  => 'nagios',
+            mode   => '0755',
+            source => $command_source,
+        })
     }
 
     nagiosng::object::service

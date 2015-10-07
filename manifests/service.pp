@@ -154,7 +154,11 @@ define monitor::service (
 
         if $command_source
         {
-            fail "command_source not implemented for run_on_agent == false"
+            $real_command_source = $command_source
+        }
+        else
+        {
+            $real_command_source = false
         }
 
         # Unless the $command_line is absolute (starts with / or $)
@@ -208,6 +212,7 @@ define monitor::service (
         server_include => $real_server_include,
         command_line   => $real_command_line,
         command_name   => $command_name,
+        command_source => $real_command_source,
         command_args   => $command_args,
         check_interval => $check_interval,
         icon           => $icon,
