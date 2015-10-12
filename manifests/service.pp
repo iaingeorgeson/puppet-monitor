@@ -44,6 +44,11 @@
 # The timeout refers specifically to check_nrpe's timeout. Nagios'
 # service check timeout is set in nagios.cfg.
 
+# The check_interval is the frequency at which to run this check. What
+# this actually means is controlled by the Nagios configuration. By
+# default, the units are minutes. At time of writing, the default is
+# in nagiosng::object::defaults, and is set to five minutes.
+
 ##TODO: servicegroups parameter
 
 define monitor::service (
