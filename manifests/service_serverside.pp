@@ -53,7 +53,7 @@ define monitor::service_serverside (
         })
     }
 
-    if $command_args and ! empty($command_args)
+    if type($command_args) == 'array' and ! empty($command_args)
     {
         $command_args_string = join ($command_args, '!')
         $real_command_name = "$command_name!$command_args_string"
