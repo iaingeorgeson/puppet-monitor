@@ -22,7 +22,7 @@ define monitor::service_serverside (
     $command_line   = false,
     $command_name,
     $command_source = false,
-    $command_args   = false,
+    $command_args   = [],
     $check_interval = false,
     $server_include = false,
     $host,
@@ -53,11 +53,20 @@ define monitor::service_serverside (
         })
     }
 
-    nagiosng::object::service
-    { "${host}-${service}":
+    if empty($command_args)
+    {
+        $real_command_name = $command_name
+    }
+    else
+    {
+        $command_args_string = join ($command_args, '!')
+        $real_command_name = "$command_name"
+    }
+
+    nagiosng::object::service { "${host}-${service}":
         attributes => {host_name           => $host,
                        service_description => $service,
-                       check_command       => $command_name,
+                       check_command       => $real_command_name,
                        check_interval      => $check_interval,
                        notes_url           => $notes_url,
         },

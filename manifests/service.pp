@@ -15,8 +15,19 @@
 # puppet variables in the string get expanded differently on different
 # nodes then bad things will happen.
 
-# $command_args is intended to deal with the issue of $command_lines
-# which would vary between nodes. It isn't implemented yet.
+# For checks run on the server (i.e. run_on_agent => false,) Nagios
+# expects the $command_line to be the same for every check of the same
+# service. If you need to pass an argument which varies between nodes
+# to the check script (for example, an IPMI IP address), you need to
+# use Nagios' argument macros mechanism. Put the argument(s) in the
+# $command_args array, and put '$ARG1$' style placeholders in the
+# $command_line. Example:
+
+#    monitor::service { 'ipmi':
+#        command_line   => 'check_kvl_ipmi --hostname $ARG1$',
+#        command_args   => [$::ipmi_ipaddress],
+#        command_source => "puppet:///modules/hardware/check_kvl_ipmi",
+#    }
 
 # $command_source is the source url of the check script to use. This
 # will be installed to $plugin_path/$basename, where $basename is the
@@ -53,7 +64,7 @@
 
 define monitor::service (
     $command_line   = false,
-    $command_args   = false,
+    $command_args   = [],
     $command_source = false,
     $plugin_path    = '/usr/lib64/nagios/plugins',
     $server_include = false,
@@ -137,6 +148,11 @@ define monitor::service (
         else
         {
             $sudo_cmd = ""
+        }
+
+        if $command_args
+        {
+            fail "command_args not implemented for run_on_agent == true"
         }
 
         nagiosng::agent::nrpe::check
