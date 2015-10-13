@@ -58,6 +58,10 @@ define monitor::service_serverside (
         $command_args_string = join ($command_args, '!')
         $real_command_name = "$command_name!$command_args_string"
     }
+    elsif type($command_args) == 'string'
+    {
+        $real_command_name = "$command_name!$command_args"
+    }
     else
     {
         $real_command_name = $command_name
