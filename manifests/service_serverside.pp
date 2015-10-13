@@ -53,14 +53,14 @@ define monitor::service_serverside (
         })
     }
 
-    if empty($command_args)
+    if $command_args and ! empty($command_args)
     {
-        $real_command_name = $command_name
+        $command_args_string = join ($command_args, '!')
+        $real_command_name = "$command_name!$command_args_string"
     }
     else
     {
-        $command_args_string = join ($command_args, '!')
-        $real_command_name = "$command_name"
+        $real_command_name = $command_name
     }
 
     nagiosng::object::service { "${host}-${service}":
