@@ -150,7 +150,7 @@ define monitor::service (
             $sudo_cmd = ""
         }
 
-        if $command_args
+        if ! empty ($command_args)
         {
             fail "command_args not implemented for run_on_agent == true"
         }
