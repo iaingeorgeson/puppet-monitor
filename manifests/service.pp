@@ -204,6 +204,7 @@ define monitor::service (
     $icon = $operatingsystem ?
     {
         'CentOS'     => 'centos.png',
+        'RedHat'     => 'redhat.png',
         'Scientific' => 'scientific.png',
         default      => 'server.png',
     }
