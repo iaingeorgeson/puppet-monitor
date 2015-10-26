@@ -20,6 +20,7 @@
 define monitor::device (
     $service        = false,
     $host           = false,
+    $hostgroup      = false,
     $address        = false,
     $command_line   = false,
     $command_source = false,
@@ -152,11 +153,20 @@ define monitor::device (
     ensure_resource ('nagiosng::object::host', $real_host,
                      {attributes => {host_name       => $real_host,
                                      alias           => $real_host,
+                                     hostgroups      => $hostgroup,
                                      address         => $real_address,
                                      icon_image      => $icon,
                                      statusmap_image => $icon,
                                      parents         => $real_parents,
                      }})
+
+    if $hostgroup
+    {
+        ensure_resource ('nagiosng::object::hostgroup', $hostgroup,
+                         {attributes => {hostgroup_name => $hostgroup,
+                                         alias          => $hostgroup,
+                         }})
+    }
 
     ##FIXME: This would be better as  if ! defined(...)
     ensure_resource  ('nagiosng::object::command', $command_name,
