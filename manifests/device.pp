@@ -128,7 +128,7 @@ define monitor::device (
     }
     else
     {
-        $real_notes_url_fmt = hiera('monitor::service::notes_url_fmt', false)
+        $real_notes_url_fmt = hiera('monitor::device::notes_url_fmt', false)
         if $real_notes_url_fmt
         {
             $notes_url = sprintf($real_notes_url_fmt, $real_service)
